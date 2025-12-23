@@ -1,0 +1,5 @@
+In python you can traverse the entire list
+In python you can process control
+In python you can set a loop
+In python you can answer question
+In python you can do everything
