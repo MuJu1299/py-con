@@ -60,6 +60,9 @@ class AlienInvasion:
         '''更新外星人群中所有外星人的位置'''
         self._check_fleet_edges()
         self.aliens.update()
+        # 碰撞
+        if pygame.sprite.spritecollideany(self.ship,self.aliens):
+            print("Ship hit!")
 
     def _create_fleet(self):
         '''创建一个外星舰队'''
