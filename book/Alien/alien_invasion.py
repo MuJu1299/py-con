@@ -72,6 +72,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
         
 
 
@@ -152,23 +153,30 @@ class AlienInvasion:
         '''单机Play按钮开始新游戏'''
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
-            self.stats.reset_stats()
-            self.game_active = True 
+            self._start_game()
+            
+    def _start_game(self):
+        '''开始'''
+        self.stats.reset_stats()
+        self.game_active = True 
 
-            self.bullets.empty()
-            self.aliens.empty()
+        self.bullets.empty()
+        self.aliens.empty()
 
-            self._create_fleet()
-            self.ship.center_ship()
+        self._create_fleet()
+        self.ship.center_ship()
 
-            # 隐藏光标
-            pygame.mouse.set_visible(False)
+        # 隐藏光标
+        pygame.mouse.set_visible(False)
+
 
     def _check_keydown_events(self,event):
         '''响应按下'''
         # 按下K_RIGHT持续向右移动
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
+        elif event.key == pygame.K_p:
+            self._start_game()
         # 按下K_LEFT键持续向左移动
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
