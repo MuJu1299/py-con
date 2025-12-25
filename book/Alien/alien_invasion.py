@@ -24,7 +24,7 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
         self.stats = GameStats(self)
-        self.game_active = True
+        self.game_active = False
 
     def run_game(self):
         '''开始游戏的主循环'''
