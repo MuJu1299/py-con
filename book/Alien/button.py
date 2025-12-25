@@ -1,8 +1,8 @@
 import pygame.font
 
-class Botton:
+class Button:
     '''初始化按钮的属性'''
-    def __init__(self,ai_game,msg0):
+    def __init__(self,ai_game,msg):
         self.screen = ai_game.screen
         self.screen_rect = self.screen.get_rect()
 

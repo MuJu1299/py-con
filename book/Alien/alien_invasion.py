@@ -6,6 +6,7 @@ from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from button import Button
 
 class AlienInvasion:
     #'''管理游戏资源和行为的类'''
@@ -25,6 +26,7 @@ class AlienInvasion:
         self._create_fleet()
         self.stats = GameStats(self)
         self.game_active = False
+        self.play_button = Button(self,"play")
 
     def run_game(self):
         '''开始游戏的主循环'''
@@ -44,6 +46,7 @@ class AlienInvasion:
             self._update_screen()
             self.clock.tick(60)
     
+
     def _check_aliens_bottom(self):
         '''检查是否有外星人到达了底边'''
         for alien in self.aliens.sprites():
@@ -182,6 +185,9 @@ class AlienInvasion:
         self.ship.blitme()
         self.aliens.draw(self.screen)
         # 让最近绘制的屏幕可见
+        if not self.game_active:
+            '''非活动显示按钮'''
+            self.play_button.draw_button()
         pygame.display.flip()
 
 if __name__ == '__main__':
