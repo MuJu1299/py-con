@@ -1,13 +1,10 @@
 import sys
-
+from time import sleep
 import pygame
-
 from settings import Setting
-
+from game_stats import GameStats
 from ship import Ship
-
 from bullet import Bullet
-
 from alien import Alien
 
 class AlienInvasion:
@@ -26,22 +23,56 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
+        self.stats = GameStats(self)
+        self.game_active = True
 
     def run_game(self):
         '''开始游戏的主循环'''
         while True:
             # 监听键盘和鼠标事件
             self._check_events()
-            # 更新飞船位置
-            self.ship.update()
-            # 更新子弹位置
-            self._update_bullets()
-            # 更新外星人位置
-            self._update_alien()
+
+            if self.game_active:
+                # 更新飞船位置
+                self.ship.update()
+                # 更新子弹位置
+                self._update_bullets()
+                # 更新外星人位置
+                self._update_alien()
+
             # 每次循环都会重绘屏幕
             self._update_screen()
             self.clock.tick(60)
+    
+    def _check_aliens_bottom(self):
+        '''检查是否有外星人到达了底边'''
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= self.setting.screen_height:
+                self._ship_hit()
+                break
 
+    def _ship_hit(self):
+        '''响应与外星人的碰撞'''
+        if self.setting.ship_limit > 0:
+            # 剩余机会减一
+            self.setting.ship_limit -= 1
+
+            # 清空外星人列表及子弹列表
+            self.bullets.empty()
+            self.aliens.empty()
+
+            # 创建一个新的舰队，并初始化飞船
+            self._create_fleet()
+            self.ship.center_ship()
+
+            # 暂停
+            sleep(0.5)
+        else:
+            self.game_active = False
+        
+
+
+        
     def _check_fleet_edges(self):
         '''有外星人到达边缘时采取相应的措施'''
         for alien in self.aliens.sprites():
@@ -62,7 +93,8 @@ class AlienInvasion:
         self.aliens.update()
         # 碰撞
         if pygame.sprite.spritecollideany(self.ship,self.aliens):
-            print("Ship hit!")
+            self._ship_hit()
+        self._check_aliens_bottom()
 
     def _create_fleet(self):
         '''创建一个外星舰队'''
