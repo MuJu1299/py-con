@@ -134,6 +134,7 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.setting.increase_speed()
 
 
     def _check_events(self):
@@ -157,6 +158,7 @@ class AlienInvasion:
             
     def _start_game(self):
         '''开始'''
+        self.setting.initialize_dynamic_settings()
         self.stats.reset_stats()
         self.game_active = True 
 
