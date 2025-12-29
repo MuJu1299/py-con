@@ -26,7 +26,10 @@ class AlienInvasion:
         self._create_fleet()
         self.stats = GameStats(self)
         self.game_active = False
-        self.play_button = Button(self,"play")
+        self.play_button = Button(self)
+        self.set_btn = Button(self)
+        self.play_button._prep_msg("play")
+        self.set_btn._set_msg('set')
 
     def run_game(self):
         '''开始游戏的主循环'''
@@ -153,12 +156,20 @@ class AlienInvasion:
     def _check_play_button(self,mouse_pos):
         '''单机Play按钮开始新游戏'''
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        set_btn_clicked = self.set_btn.set_rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
             self._start_game()
+        elif set_btn_clicked:
+            self._set_difficulty()
+        
+    def _set_difficulty(self):
+        '''切换难度'''
+        self.setting.increase_speed()
+
             
     def _start_game(self):
         '''开始'''
-        self.setting.initialize_dynamic_settings()
+        # self.setting.initialize_dynamic_settings()
         self.stats.reset_stats()
         self.game_active = True 
 
@@ -217,6 +228,7 @@ class AlienInvasion:
         if not self.game_active:
             '''非活动显示按钮'''
             self.play_button.draw_button()
+            self.set_btn.draw_set_btn()
         pygame.display.flip()
 
 if __name__ == '__main__':
