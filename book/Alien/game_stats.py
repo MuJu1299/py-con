@@ -5,6 +5,8 @@ class GameStats:
         '''初始化统计信息'''
         self.settings = ai_game.setting
         self.reset_stats()
+        self.score = 0
+        self.hight_score = 0
 
     def reset_stats(self):
         '''初始化在游戏运行期间可能存在的变化统计信息'''

@@ -7,6 +7,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from button import Button
+from scoreboard import Scoreboard
 
 class AlienInvasion:
     #'''管理游戏资源和行为的类'''
@@ -30,6 +31,7 @@ class AlienInvasion:
         self.set_btn = Button(self)
         self.play_button._prep_msg("play")
         self.set_btn._set_msg('set')
+        self.sb = Scoreboard(self)
 
     def run_game(self):
         '''开始游戏的主循环'''
@@ -130,6 +132,19 @@ class AlienInvasion:
         self.bullets.update()
         # 检查是否有子弹击中了外星人
         collisions = pygame.sprite.groupcollide(self.bullets,self.aliens,False,True)
+        # 击中得分
+        # collisions 是一个字典
+        # 键：子弹对象
+        # 值：与该子弹碰撞的外星人列表
+        # collisions = {
+        #     bullet1: [alien1, alien2],  # 一个子弹击中了两个外星人
+        #     bullet2: [alien3]          # 另一个子弹击中了一个外星人
+        #     }
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.setting.alien_point*len(aliens)
+                self.sb.prep_score()
+                self.sb.check_hight_score()
         # 删除已消失的子弹
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0: 
@@ -229,6 +244,7 @@ class AlienInvasion:
             '''非活动显示按钮'''
             self.play_button.draw_button()
             self.set_btn.draw_set_btn()
+        self.sb.show_score()
         pygame.display.flip()
 
 if __name__ == '__main__':
