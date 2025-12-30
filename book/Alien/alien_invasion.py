@@ -38,7 +38,6 @@ class AlienInvasion:
         while True:
             # 监听键盘和鼠标事件
             self._check_events()
-
             if self.game_active:
                 # 更新飞船位置
                 self.ship.update()
@@ -65,6 +64,9 @@ class AlienInvasion:
             # 剩余机会减一
             self.setting.ship_limit -= 1
 
+            self.stats.ships_left -= 1
+            self.sb.prep_ships()
+
             # 清空外星人列表及子弹列表
             self.bullets.empty()
             self.aliens.empty()
@@ -79,9 +81,6 @@ class AlienInvasion:
             self.game_active = False
             pygame.mouse.set_visible(True)
         
-
-
-        
     def _check_fleet_edges(self):
         '''有外星人到达边缘时采取相应的措施'''
         for alien in self.aliens.sprites():
@@ -94,7 +93,6 @@ class AlienInvasion:
         for alien in self.aliens.sprites():
             alien.rect.y += self.setting.fleet_drop_speed
         self.setting.fleet_direction *= -1
-
 
     def _update_alien(self):
         '''更新外星人群中所有外星人的位置'''
@@ -153,7 +151,8 @@ class AlienInvasion:
             self.bullets.empty()
             self._create_fleet()
             self.setting.increase_speed()
-
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _check_events(self):
         '''响应按键和鼠标事件'''
@@ -174,6 +173,8 @@ class AlienInvasion:
         set_btn_clicked = self.set_btn.set_rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
             self._start_game()
+            self.sb.prep_level()
+            self.sb.prep_ships()
         elif set_btn_clicked:
             self._set_difficulty()
         
@@ -213,7 +214,8 @@ class AlienInvasion:
             sys.exit()
         # 按下空格键发射子弹
         elif event.key == pygame.K_SPACE:
-            self._fire_bullet()
+            if self.game_active:
+                self._fire_bullet()
 
     def _fire_bullet(self):
         '''创建一颗子弹，并将其加入编组bullets中'''

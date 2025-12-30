@@ -7,6 +7,7 @@ class GameStats:
         self.reset_stats()
         self.score = 0
         self.hight_score = 0
+        self.level = 1
 
     def reset_stats(self):
         '''初始化在游戏运行期间可能存在的变化统计信息'''
