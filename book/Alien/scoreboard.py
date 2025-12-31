@@ -23,6 +23,7 @@ class Scoreboard:
         # 等级
         self.prep_level()
         self.prep_ships()
+        self._extract_hc_storage()
 
     def prep_ships(self):
         '''显示余下多少飞船'''
@@ -33,6 +34,12 @@ class Scoreboard:
             ship.rect.y = 10
             self.ships.add(ship)
 
+    def _extract_hc_storage(self):
+        '''提取最高得分储存并导入'''
+        storage = self.ai_game.path.read_text().splitlines()
+        hc_storage = int(storage[0])
+        self.ai_game.stats.hight_score = hc_storage
+        self.prep_hight_score()
 
     def prep_level(self):
         '''将等级渲染为图像'''

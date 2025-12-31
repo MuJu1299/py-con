@@ -22,7 +22,7 @@ class Setting:
         # fleet_direction为1表示向右移，为-1表示向左移
         self.fleet_direction = 1
 
-        self.ship_limit = 3
+        self.ship_limit = 1
 
         # 以什么速度加快游戏节奏
         self.speedup_scale = 1.1

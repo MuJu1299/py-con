@@ -8,6 +8,7 @@ from bullet import Bullet
 from alien import Alien
 from button import Button
 from scoreboard import Scoreboard
+from pathlib import Path
 
 class AlienInvasion:
     #'''管理游戏资源和行为的类'''
@@ -31,7 +32,10 @@ class AlienInvasion:
         self.set_btn = Button(self)
         self.play_button._prep_msg("play")
         self.set_btn._set_msg('set')
+        self.path = Path("book\Alien\storage.txt")
         self.sb = Scoreboard(self)
+
+
 
     def run_game(self):
         '''开始游戏的主循环'''
@@ -49,7 +53,8 @@ class AlienInvasion:
             # 每次循环都会重绘屏幕
             self._update_screen()
             self.clock.tick(60)
-    
+
+
 
     def _check_aliens_bottom(self):
         '''检查是否有外星人到达了底边'''
@@ -78,8 +83,18 @@ class AlienInvasion:
             # 暂停
             sleep(0.5)
         else:
+            self._hc_storage()
             self.game_active = False
             pygame.mouse.set_visible(True)
+
+    def _hc_storage(self):
+        '''储存最高评分'''
+        storage = self.path.read_text()
+        lines = storage.splitlines()
+        hc_storage = int(lines[0].rstrip())
+        if hc_storage < self.stats.hight_score:
+            self.path.write_text(str(self.stats.hight_score))
+
         
     def _check_fleet_edges(self):
         '''有外星人到达边缘时采取相应的措施'''
