@@ -9,11 +9,13 @@ from alien import Alien
 from button import Button
 from scoreboard import Scoreboard
 from pathlib import Path
+from pygame import mixer
 
 class AlienInvasion:
     #'''管理游戏资源和行为的类'''
     def __init__(self):
         pygame.init()
+        pygame.mixer.init(frequency=44100,size=-16,channels=2,buffer=512)
         self.clock = pygame.time.Clock()
         self.setting = Setting()
         self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
@@ -237,6 +239,8 @@ class AlienInvasion:
         if len(self.bullets) < self.setting.bullet_allowance:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            sound_effect = pygame.mixer.Sound("book\Alien\sound\Shooting.mp3")
+            sound_effect.play(loops=0)
 
     def _check_keyup_events(self,event):
         '''响应松开'''
